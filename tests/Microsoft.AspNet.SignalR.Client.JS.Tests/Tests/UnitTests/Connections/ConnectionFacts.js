@@ -54,7 +54,7 @@ QUnit.test("connection.withCredentials defaults to false for same-domain", funct
     var connection = testUtilities.createConnection("/signalr", function () { }, QUnit, "", false);
 
     connection.start();
-    
+
     QUnit.isNotSet(connection.withCredentials, "connection.withCredentials should default to false for same-domain connection.");
 
     connection.stop();
@@ -67,7 +67,7 @@ QUnit.test("connection.withCredentials defaults to true for cross-domain", funct
     // We need the isCrossDomain function to work so we need to be sure it's enabled.
     window.document.crossDomainDisabled = false;
     con.start();
-    
+
     QUnit.ok(con.withCredentials, "connection.withCredentials should default to true for cross-domain connection.");
 
     window.document.crossDomainDisabled = true;
@@ -87,4 +87,14 @@ QUnit.test("connection.withCredentials manual override to false for cross-domain
     con.start({ withCredentials: false });
 
     QUnit.ok(!con.withCredentials, "connection.withCredentials overridden to false for cross-domain connection.");
+});
+
+QUnit.test("pingIntervalId does not change on multiple calls to configurePingInterval", function () {
+    var con = $.connection();
+
+    con._.pingIntervalId = 1;
+
+    $.signalR._.configurePingInterval();
+
+    QUnit.isTrue(con._.pingIntervalId, 1);
 });
